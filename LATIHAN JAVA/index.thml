@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo JS</title>
+</head>
+<body>
+    <h2>Demo JavaScript</h2>
+
+    <p id="hobi">Hasil Hobi</p>
+
+    <button onclick="document.getElementById('demo').innerHTML = Date()">Jam Berapa Sekarang?</button>
+    <p id="demo">Demo</p>
+
+    <button onclick="this.innerHTML = Date()">Klik ini juga</button>
+
+    <select id="hobi" onchange="myFunctionHobi()">
+        <option value="--">-- pilih hobi --</option>
+        <option value="Hobi Lari">Lari</option>
+        <option value="Hobi Renang">Renang</option>
+    </select>
+
+    <p id="texthobi">Hasil Hobi</p>
+</body>
+</html>
+<script language="javascript">
+    var hobi = prompt("Masukkan Hobi Anda:");
+    document.getElementById("hobi").innerHTML = "Hobi Anda adalah: " + hobi;
+
+    // ALERT saat load
+    alert("Hallo Nova!");
+
+    // WRITE ke body (setelah alert)
+    document.write("Selamat Mencoba JavaScript <br>");
+    document.write("Semoga Sukses! <br><br>");
+
+    // FUNCTION EVENT SELECT
+    function myFuctionHobi() {
+        var x = document.getElementById("hobi").value;
+        document.getElementById("texthobi").innerHTML = "Anda Memilih : " + x;
+    }
+</script>

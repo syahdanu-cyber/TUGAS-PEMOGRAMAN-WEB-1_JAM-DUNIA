@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jam Dunia Interaktif 🌍</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg') no-repeat center center fixed;
+      background-size: cover;
+      text-align: center;
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #ffeb3b;
+      margin-top: 20px;
+    }
+
+    .subtext {
+      color: #ddd;
+      margin-bottom: 30px;
+    }
+
+    .clock-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .clock {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 20px;
+      width: 280px;
+      transition: 0.3s;
+    }
+
+    .clock:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: scale(1.05);
+    }
+
+    .clock h2 {
+      color: #ffeb3b;
+      margin-bottom: 10px;
+    }
+
+    .time {
+      font-size: 1.8em;
+      font-weight: bold;
+    }
+
+    .date {
+      font-size: 1em;
+      margin-top: 5px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      font-style: italic;
+      background: rgba(0, 0, 0, 0.6);
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    select, button {
+      padding: 10px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #2196f3;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0b79d0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🕒 Jam Dunia Interaktif</h1>
+  <p class="subtext">Lihat waktu di berbagai negara dan dapatkan motivasi baru!</p>
+
+  <div id="mainClock" class="clock">
+    <h2>Waktu Indonesia (Jakarta)</h2>
+    <div class="time" id="time-jakarta">--:--:--</div>
+    <div class="date" id="date-jakarta">Memuat...</div>
+  </div>
+
+  <div class="clock-container" id="worldClocks"></div>
+
+  <div>
+    <select id="citySelect">
+      <option value="Asia/Tokyo">Tokyo, Jepang</option>
+      <option value="Europe/London">London, Inggris</option>
+      <option value="America/New_York">New York, AS</option>
+      <option value="Australia/Sydney">Sydney, Australia</option>
+      <option value="Europe/Paris">Paris, Prancis</option>
+      <option value="Asia/Dubai">Dubai, UEA</option>
+    </select>
+    <button onclick="addClock()">Tambah Zona</button>
+  </div>
+
+  <p class="footer" id="motivation">"Fokuslah pada kemajuan, bukan kesempurnaan."</p>
+
+  <script>
+    const motivationList = [
+      "Waktu tidak menunggu siapa pun, manfaatkanlah sekarang!",
+      "Setiap detik adalah kesempatan untuk menjadi lebih baik.",
+      "Hidupmu berubah saat kamu mulai menghargai waktu.",
+      "Jangan menunggu waktu yang tepat, buatlah waktu itu tepat!",
+      "Bangun dan berjuang, waktumu berharga!"
+    ];
+
+    function getFormattedDateTime(timezone) {
+      const now = new Date();
+      const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: timezone };
+      const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: timezone };
+      return {
+        time: now.toLocaleTimeString('id-ID', optionsTime),
+        date: now.toLocaleDateString('id-ID', optionsDate)
+      };
+    }
+
+    function updateMainClock() {
+      const jakarta = getFormattedDateTime('Asia/Jakarta');
+      document.getElementById('time-jakarta').textContent = jakarta.time;
+      document.getElementById('date-jakarta').textContent = jakarta.date;
+    }
+
+    const worldClocks = {};
+
+    function addClock() {
+      const select = document.getElementById('citySelect');
+      const timezone = select.value;
+      const label = select.options[select.selectedIndex].text;
+
+      if (worldClocks[timezone]) return alert("Zona waktu sudah ditambahkan!");
+
+      const container = document.createElement('div');
+      container.className = 'clock';
+      container.innerHTML = `
+        <h2>${label}</h2>
+        <div class="time" id="time-${timezone.replace('/', '-')}">--:--:--</div>
+        <div class="date" id="date-${timezone.replace('/', '-')}">Memuat...</div>
+      `;
+      document.getElementById('worldClocks').appendChild(container);
+      worldClocks[timezone] = container;
+    }
+
+    function updateWorldClocks() {
+      Object.keys(worldClocks).forEach(zone => {
+        const { time, date } = getFormattedDateTime(zone);
+        document.getElementById(`time-${zone.replace('/', '-')}`).textContent = time;
+        document.getElementById(`date-${zone.replace('/', '-')}`).textContent = date;
+      });
+    }
+
+    setInterval(() => {
+      updateMainClock();
+      updateWorldClocks();
+    }, 1000);
+
+    // Klik motivasi untuk menampilkan pesan baru
+    document.getElementById('motivation').addEventListener('click', () => {
+      const random = motivationList[Math.floor(Math.random() * motivationList.length)];
+      document.getElementById('motivation').textContent = `"${random}"`;
+    });
+
+    updateMainClock();
+  </script>
+</body>
+</html>
